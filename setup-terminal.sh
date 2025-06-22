@@ -2,6 +2,13 @@
 set -e
 
 # ----------------------------------------
+# 📦 Install Required Dependencies
+# ----------------------------------------
+echo "Installing required packages..."
+sudo apt update
+sudo apt install -y unzip curl wget fontconfig
+
+# ----------------------------------------
 # 🔧 Ask the user to choose a shell setup
 # ----------------------------------------
 echo "Which shell setup do you want?"
