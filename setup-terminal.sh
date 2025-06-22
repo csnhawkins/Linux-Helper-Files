@@ -6,7 +6,12 @@ set -e
 # ----------------------------------------
 echo "Installing required packages..."
 sudo apt update
-sudo apt install -y unzip curl wget fontconfig
+sudo apt install -y unzip curl wget fontconfig git zsh tmux
+
+# ----------------------------------------
+# 🛠️ Add ~/.local/bin to PATH for this session
+# ----------------------------------------
+export PATH="$HOME/.local/bin:$PATH"
 
 # ----------------------------------------
 # 🔧 Ask the user to choose a shell setup
@@ -51,7 +56,11 @@ install_oh_my_posh() {
 set_default_shell() {
   SHELL_PATH=$(command -v "$1")
   echo "Setting default shell to $SHELL_PATH..."
-  chsh -s "$SHELL_PATH"
+  if ! echo "$SHELL" | grep -q "$SHELL_PATH"; then
+    if ! chsh -s "$SHELL_PATH"; then
+      echo "⚠️  Could not change default shell. You may need to do this manually."
+    fi
+  fi
 }
 
 # ----------------------------------------
@@ -128,7 +137,7 @@ if [[ "$choice" == "1" ]]; then
   THEME_PATH="$HOME/.poshthemes/cramer.omp.json"
   mkdir -p ~/.poshthemes
   curl -s https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/cramer.omp.json -o "$THEME_PATH"
-  
+
   if ! grep -q "oh-my-posh init bash" "$PROFILE"; then
     echo "eval \"\\$(oh-my-posh init bash --config $THEME_PATH)\"" >> "$PROFILE"
   fi
@@ -136,14 +145,13 @@ if [[ "$choice" == "1" ]]; then
 
 elif [[ "$choice" == "2" ]]; then
   echo "Installing Zsh + Oh My Posh setup..."
-  sudo apt update && sudo apt install -y zsh curl
   install_oh_my_posh
 
   PROFILE="$HOME/.zshrc"
   THEME_PATH="$HOME/.poshthemes/cramer.omp.json"
   mkdir -p ~/.poshthemes
   curl -s https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/cramer.omp.json -o "$THEME_PATH"
-  
+
   if ! grep -q "oh-my-posh init zsh" "$PROFILE"; then
     echo "eval \"\\$(oh-my-posh init zsh --config $THEME_PATH)\"" >> "$PROFILE"
   fi
@@ -151,7 +159,6 @@ elif [[ "$choice" == "2" ]]; then
 
 elif [[ "$choice" == "3" ]]; then
   echo "Installing Zsh + Oh My Zsh + Powerlevel10k..."
-  sudo apt update && sudo apt install -y zsh curl git
 
   if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
     echo "Installing Oh My Zsh..."
