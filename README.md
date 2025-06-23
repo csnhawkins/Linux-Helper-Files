@@ -27,7 +27,7 @@ A simple shell script to fully configure Zsh with [Oh My Zsh](https://ohmyz.sh/)
 
 ### 1. Clone the repository
 
-git clone https://github.com/your-username/zsh-setup.git](https://github.com/csnhawkins/Linux-Helper-Files.git
+git clone https://github.com/csnhawkins/Linux-Helper-Files.git
 cd zsh-setup
 
 ### 2. Run the script
