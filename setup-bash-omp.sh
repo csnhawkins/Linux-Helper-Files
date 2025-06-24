@@ -22,32 +22,33 @@ wget -q https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/th
 unzip -o ~/.poshthemes/themes.zip -d ~/.poshthemes
 chmod u+rw ~/.poshthemes/*.omp.json
 
-# 4. Prompt to select theme (no previews shown)
+# 4. Inform about themes location
 echo "🎨 Oh My Posh themes have been downloaded to: ~/.poshthemes"
-echo "🌐 You can browse theme previews at: https://ohmyposh.dev/docs/themes"
+echo "🌐 Browse theme previews at: https://ohmyposh.dev/docs/themes"
 echo "📁 Example theme name: jandedobbeleer.omp.json"
 read -p "💬 Enter the name of the theme you want to use, or press Enter to use the default (jandedobbeleer.omp.json): " SELECTED_THEME
 
 if [ -n "$SELECTED_THEME" ] && [ -f "$HOME/.poshthemes/$SELECTED_THEME" ]; then
   THEME="$HOME/.poshthemes/$SELECTED_THEME"
+  echo "✅ Using selected theme: $SELECTED_THEME"
 else
   THEME="$HOME/.poshthemes/jandedobbeleer.omp.json"
   echo "✅ Using default theme: jandedobbeleer.omp.json"
 fi
 
-# 5. Configure Oh My Posh in .bashrc (update or add)
+# 5. Configure Oh My Posh in .bashrc - update or add
 BASHRC="$HOME/.bashrc"
-OMP_LINE="eval \"\$(oh-my-posh init bash --config $THEME)\""
+OMP_INIT_LINE="eval \"\$(oh-my-posh init bash --config $THEME)\""
 
 if grep -q "oh-my-posh init bash" "$BASHRC"; then
-  # Replace existing oh-my-posh init line with new theme
-  sed -i "s|^eval .*oh-my-posh init bash.*|$OMP_LINE|" "$BASHRC"
+  # Replace existing oh-my-posh init line to update theme
+  sed -i "s|eval \\\$(oh-my-posh init bash --config .*|$OMP_INIT_LINE|" "$BASHRC"
   echo "🔄 Updated Oh My Posh theme in .bashrc"
 else
-  # Add oh-my-posh init lines if not present
+  # Append if not found
   echo "" >> "$BASHRC"
   echo "# 🧠 Oh My Posh prompt" >> "$BASHRC"
-  echo "$OMP_LINE" >> "$BASHRC"
+  echo "$OMP_INIT_LINE" >> "$BASHRC"
   echo "✅ Added Oh My Posh to .bashrc"
 fi
 
@@ -69,27 +70,18 @@ else
 fi
 
 # 8. Enable useful bash-it plugins
-~/.bash_it/bash_it.sh enable completion git
-~/.bash_it/bash_it.sh enable plugin alias-completion base
+~/.bash_it/bash-it.sh enable completion git
+~/.bash_it/bash-it.sh enable plugin alias-completion base
 
 # 9. Disable bash-it themes (we're using oh-my-posh instead)
 sed -i 's/^export BASH_IT_THEME=.*/# Disabled theme, using oh-my-posh/' "$HOME/.bashrc"
 
-# 10. Install bash-autosuggestions
-if [ ! -d "$HOME/.bash-autosuggestions" ]; then
-  echo "💡 Installing bash-autosuggestions..."
-  git clone https://github.com/gh0stzk/bash-autosuggestions.git ~/.bash-autosuggestions
-  echo "source ~/.bash-autosuggestions/autosuggestions.sh" >> "$HOME/.bashrc"
-else
-  echo "✅ bash-autosuggestions already installed"
-fi
-
-# 11. Final message
+# 10. Final message
 echo
 echo "🎉 Bash + Oh My Posh setup complete!"
 echo "👉 Restart your terminal to see the new prompt."
 echo "📁 Themes are in: ~/.poshthemes"
 echo "🎨 Change your theme by editing your .bashrc line:"
-echo "    $OMP_LINE"
-echo "🧠 Plugins enabled: bash-it (git, completion, aliases), autosuggestions"
+echo "    $OMP_INIT_LINE"
+echo "🧠 Plugins enabled: bash-it (git, completion, aliases)"
 echo "🔤 Make sure your terminal font is set to: FiraCode Nerd Font"
