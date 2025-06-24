@@ -69,8 +69,8 @@ else
 fi
 
 # 8. Enable useful bash-it plugins
-~/.bash_it/bin/bash-it enable completion git
-~/.bash_it/bin/bash-it enable plugin alias-completion base
+~/.bash_it/bash-it enable completion git
+~/.bash_it/bash-it enable plugin alias-completion base
 
 # 9. Disable bash-it themes (we're using oh-my-posh instead)
 sed -i 's/^export BASH_IT_THEME=.*/# Disabled theme, using oh-my-posh/' "$HOME/.bashrc"
