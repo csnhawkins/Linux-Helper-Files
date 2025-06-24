@@ -78,7 +78,7 @@ sed -i 's/^export BASH_IT_THEME=.*/# Disabled theme, using oh-my-posh/' "$HOME/.
 # 10. Install bash-autosuggestions
 if [ ! -d "$HOME/.bash-autosuggestions" ]; then
   echo "💡 Installing bash-autosuggestions..."
-  git clone https://github.com/gh0stzk/bash-autosuggestions ~/.bash-autosuggestions
+  git clone https://github.com/gh0stzk/bash-autosuggestions.git ~/.bash-autosuggestions
   echo "source ~/.bash-autosuggestions/autosuggestions.sh" >> "$HOME/.bashrc"
 else
   echo "✅ bash-autosuggestions already installed"
