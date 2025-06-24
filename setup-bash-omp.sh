@@ -22,16 +22,11 @@ wget -q https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/th
 unzip -o ~/.poshthemes/themes.zip -d ~/.poshthemes
 chmod u+rw ~/.poshthemes/*.omp.json
 
-# 4. Preview and select a theme
-echo "🖼️  Available Themes Preview (first 10 shown):"
-THEMES=(~/.poshthemes/*.omp.json)
-for theme in "${THEMES[@]:0:10}"; do
-  echo "Previewing theme: $(basename "$theme")"
-  oh-my-posh init bash --config "$theme" | head -n 10
-  echo "-----------------------------"
-done
-
-read -p "🎨 Enter the name of the theme you want to use (e.g., jandedobbeleer.omp.json), or press Enter to use default: " SELECTED_THEME
+# 4. Prompt to select theme (no previews shown)
+echo "🎨 Oh My Posh themes have been downloaded to: ~/.poshthemes"
+echo "🌐 You can browse theme previews at: https://ohmyposh.dev/docs/themes"
+echo "📁 Example theme name: jandedobbeleer.omp.json"
+read -p "💬 Enter the name of the theme you want to use, or press Enter to use the default (jandedobbeleer.omp.json): " SELECTED_THEME
 
 if [ -n "$SELECTED_THEME" ] && [ -f "$HOME/.poshthemes/$SELECTED_THEME" ]; then
   THEME="$HOME/.poshthemes/$SELECTED_THEME"
