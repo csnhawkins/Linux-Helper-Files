@@ -34,14 +34,22 @@ A streamlined setup script for Bash users that includes [Oh My Posh](https://ohm
 ```bash
 git clone https://github.com/csnhawkins/Linux-Helper-Files.git
 cd Linux-Helper-Files
+```
 
 #### 2. Run the bash setup script
 
+```bash
 chmod +x setup-bash-omp.sh
 ./setup-bash-omp.sh
+```
 
 #### 3. Restart your terminal to apply your theme
+
+```bash
 bash
+```
+
+---
 
 ## ⚡ Zsh Setup (Alternative Option)
 
@@ -71,12 +79,17 @@ A simple shell script to fully configure Zsh with [Oh My Zsh](https://ohmyz.sh/)
 ```bash
 git clone https://github.com/csnhawkins/Linux-Helper-Files.git
 cd Linux-Helper-Files
+```
 
-#### 2. Run the bash setup script
+#### 2. Run the Zsh setup script
 
+```bash
 chmod +x setup-zsh.sh
 ./setup-zsh.sh
+```
 
 #### 3. Restart your terminal to apply your theme
-exec zsh
 
+```bash
+exec zsh
+```
