@@ -22,38 +22,42 @@ wget -q https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/th
 unzip -o ~/.poshthemes/themes.zip -d ~/.poshthemes
 chmod u+rw ~/.poshthemes/*.omp.json
 
-# 4. Inform about themes location
 echo "🎨 Oh My Posh themes have been downloaded to: ~/.poshthemes"
-echo "🌐 Browse theme previews at: https://ohmyposh.dev/docs/themes"
+echo "🌐 You can browse theme previews at: https://ohmyposh.dev/docs/themes"
 echo "📁 Example theme name: jandedobbeleer.omp.json"
 read -p "💬 Enter the name of the theme you want to use, or press Enter to use the default (jandedobbeleer.omp.json): " SELECTED_THEME
 
+# Ensure theme ends in .omp.json
+if [[ -n "$SELECTED_THEME" && "$SELECTED_THEME" != *.omp.json ]]; then
+  SELECTED_THEME="$SELECTED_THEME.omp.json"
+fi
+
+# Validate selected theme
 if [ -n "$SELECTED_THEME" ] && [ -f "$HOME/.poshthemes/$SELECTED_THEME" ]; then
   THEME="$HOME/.poshthemes/$SELECTED_THEME"
   echo "✅ Using selected theme: $SELECTED_THEME"
 else
   THEME="$HOME/.poshthemes/jandedobbeleer.omp.json"
-  echo "✅ Using default theme: jandedobbeleer.omp.json"
+  echo "⚠️  Theme not found, falling back to default: jandedobbeleer.omp.json"
 fi
 
-# 5. Configure Oh My Posh in .bashrc - remove old lines, then add new
+# 4. Configure Oh My Posh in .bashrc
 BASHRC="$HOME/.bashrc"
 OMP_LINE="eval \"\$(oh-my-posh init bash --config $THEME)\""
 
-# Replace existing line or add if missing
-if grep -q "oh-my-posh init bash" "$BASHRC"; then
-  sed -i "s|.*oh-my-posh init bash.*|$OMP_LINE|" "$BASHRC"
-  echo "🔄 Updated Oh My Posh theme in .bashrc"
-else
-  echo "" >> "$BASHRC"
-  echo "# 🧠 Oh My Posh prompt" >> "$BASHRC"
-  echo "$OMP_LINE" >> "$BASHRC"
-  echo "✅ Added Oh My Posh to .bashrc"
-fi
+# Remove old oh-my-posh config lines
+sed -i '/oh-my-posh init bash/d' "$BASHRC"
+sed -i '/# 🧠 Oh My Posh prompt/d' "$BASHRC"
 
-echo "🔄 Oh My Posh theme configured in .bashrc"
+# Add new config
+{
+  echo ""
+  echo "# 🧠 Oh My Posh prompt"
+  echo "$OMP_LINE"
+} >> "$BASHRC"
+echo "✅ Updated .bashrc with selected theme"
 
-# 6. Install FiraCode Nerd Font
+# 5. Install FiraCode Nerd Font
 echo "🔠 Installing FiraCode Nerd Font..."
 FONT_DIR="$HOME/.local/share/fonts"
 mkdir -p "$FONT_DIR"
@@ -61,7 +65,7 @@ wget -q https://github.com/ryanoasis/nerd-fonts/releases/latest/download/FiraCod
 unzip -qo "$FONT_DIR/FiraCode.zip" -d "$FONT_DIR"
 fc-cache -fv "$FONT_DIR"
 
-# 7. Install bash-it (like oh-my-zsh for Bash)
+# 6. Install bash-it (like oh-my-zsh for Bash)
 if [ ! -d "$HOME/.bash_it" ]; then
   echo "🧰 Installing bash-it..."
   git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
@@ -70,22 +74,19 @@ else
   echo "✅ bash-it already installed"
 fi
 
-# 8. Enable useful bash-it plugins
+# 7. Enable useful bash-it plugins
 ~/.bash_it/bash_it.sh enable completion git
 ~/.bash_it/bash_it.sh enable plugin alias-completion base
 
-# 9. Disable bash-it themes (we're using oh-my-posh instead)
+# 8. Disable bash-it themes (we're using oh-my-posh instead)
 sed -i 's/^export BASH_IT_THEME=.*/# Disabled theme, using oh-my-posh/' "$HOME/.bashrc"
 
-echo "🔁 Reloading .bashrc to apply changes..."
-source "$HOME/.bashrc"
-
-# 10. Final message
+# 9. Final message
 echo
 echo "🎉 Bash + Oh My Posh setup complete!"
 echo "👉 Restart your terminal to see the new prompt."
 echo "📁 Themes are in: ~/.poshthemes"
 echo "🎨 Change your theme by editing your .bashrc line:"
-echo "    $OMP_INIT_LINE"
+echo "    $OMP_LINE"
 echo "🧠 Plugins enabled: bash-it (git, completion, aliases)"
 echo "🔤 Make sure your terminal font is set to: FiraCode Nerd Font"
