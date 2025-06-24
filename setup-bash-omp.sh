@@ -38,15 +38,18 @@ fi
 
 # 5. Configure Oh My Posh in .bashrc - remove old lines, then add new
 BASHRC="$HOME/.bashrc"
-OMP_INIT_LINE="eval \"\$(oh-my-posh init bash --config $THEME)\""
+OMP_LINE="eval \"\$(oh-my-posh init bash --config $THEME)\""
 
-# Remove any existing oh-my-posh init lines
-sed -i '/oh-my-posh init bash/d' "$BASHRC"
-
-# Append new init line at the end
-echo "" >> "$BASHRC"
-echo "# 🧠 Oh My Posh prompt" >> "$BASHRC"
-echo "$OMP_INIT_LINE" >> "$BASHRC"
+# Replace existing line or add if missing
+if grep -q "oh-my-posh init bash" "$BASHRC"; then
+  sed -i "s|.*oh-my-posh init bash.*|$OMP_LINE|" "$BASHRC"
+  echo "🔄 Updated Oh My Posh theme in .bashrc"
+else
+  echo "" >> "$BASHRC"
+  echo "# 🧠 Oh My Posh prompt" >> "$BASHRC"
+  echo "$OMP_LINE" >> "$BASHRC"
+  echo "✅ Added Oh My Posh to .bashrc"
+fi
 
 echo "🔄 Oh My Posh theme configured in .bashrc"
 
@@ -73,6 +76,9 @@ fi
 
 # 9. Disable bash-it themes (we're using oh-my-posh instead)
 sed -i 's/^export BASH_IT_THEME=.*/# Disabled theme, using oh-my-posh/' "$HOME/.bashrc"
+
+echo "🔁 Reloading .bashrc to apply changes..."
+source "$HOME/.bashrc"
 
 # 10. Final message
 echo
