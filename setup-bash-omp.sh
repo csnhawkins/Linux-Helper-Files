@@ -37,8 +37,8 @@ if [ -n "$SELECTED_THEME" ] && [ -f "$HOME/.poshthemes/$SELECTED_THEME" ]; then
   THEME="$HOME/.poshthemes/$SELECTED_THEME"
   echo "✅ Using selected theme: $SELECTED_THEME"
 else
-  THEME="$HOME/.poshthemes/jandedobbeleer.omp.json"
-  echo "⚠️  Theme not found, falling back to default: jandedobbeleer.omp.json"
+  THEME="$HOME/.poshthemes/powerlevel10k_rainbow.omp.json"
+  echo "⚠️  Theme not found, falling back to default: powerlevel10k_rainbow.omp.json"
 fi
 
 # 4. Configure Oh My Posh in .bashrc
