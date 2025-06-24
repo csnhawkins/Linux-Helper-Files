@@ -24,8 +24,8 @@ chmod u+rw ~/.poshthemes/*.omp.json
 
 echo "🎨 Oh My Posh themes have been downloaded to: ~/.poshthemes"
 echo "🌐 You can browse theme previews at: https://ohmyposh.dev/docs/themes"
-echo "📁 Example theme name: jandedobbeleer.omp.json"
-read -p "💬 Enter the name of the theme you want to use, or press Enter to use the default (jandedobbeleer.omp.json): " SELECTED_THEME
+echo "📁 Example theme name: powerlevel10k_rainbow"
+read -p "💬 Enter the name of the theme you want to use, or press Enter to use the default (powerlevel10k_rainbow): " SELECTED_THEME
 
 # Ensure theme ends in .omp.json
 if [[ -n "$SELECTED_THEME" && "$SELECTED_THEME" != *.omp.json ]]; then
