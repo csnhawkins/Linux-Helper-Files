@@ -36,21 +36,19 @@ else
   echo "✅ Using default theme: jandedobbeleer.omp.json"
 fi
 
-# 5. Configure Oh My Posh in .bashrc - update or add
+# 5. Configure Oh My Posh in .bashrc - remove old lines, then add new
 BASHRC="$HOME/.bashrc"
 OMP_INIT_LINE="eval \"\$(oh-my-posh init bash --config $THEME)\""
 
-if grep -q "oh-my-posh init bash" "$BASHRC"; then
-  # Replace existing oh-my-posh init line to update theme
-  sed -i "s|eval \\\$(oh-my-posh init bash --config .*|$OMP_INIT_LINE|" "$BASHRC"
-  echo "🔄 Updated Oh My Posh theme in .bashrc"
-else
-  # Append if not found
-  echo "" >> "$BASHRC"
-  echo "# 🧠 Oh My Posh prompt" >> "$BASHRC"
-  echo "$OMP_INIT_LINE" >> "$BASHRC"
-  echo "✅ Added Oh My Posh to .bashrc"
-fi
+# Remove any existing oh-my-posh init lines
+sed -i '/oh-my-posh init bash/d' "$BASHRC"
+
+# Append new init line at the end
+echo "" >> "$BASHRC"
+echo "# 🧠 Oh My Posh prompt" >> "$BASHRC"
+echo "$OMP_INIT_LINE" >> "$BASHRC"
+
+echo "🔄 Oh My Posh theme configured in .bashrc"
 
 # 6. Install FiraCode Nerd Font
 echo "🔠 Installing FiraCode Nerd Font..."
