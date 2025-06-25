@@ -3,6 +3,13 @@ set -e
 
 echo "🔧 Installing Bash + Oh My Posh + Productivity Plugins..."
 
+# ----------------------------------------
+# 📦 Install Required Dependencies
+# ----------------------------------------
+echo "Installing required packages..."
+sudo apt update
+sudo apt install -y unzip curl wget fontconfig git
+
 # 1. Ensure ~/.local/bin is in PATH
 export PATH="$HOME/.local/bin:$PATH"
 mkdir -p "$HOME/.local/bin"
