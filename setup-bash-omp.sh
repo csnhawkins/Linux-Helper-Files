@@ -14,6 +14,15 @@ sudo apt install -y unzip curl wget fontconfig git
 export PATH="$HOME/.local/bin:$PATH"
 mkdir -p "$HOME/.local/bin"
 
+# Ensure ~/.bash_profile sources ~/.bashrc for login shells
+BASH_PROFILE="$HOME/.bash_profile"
+if ! grep -qF "source ~/.bashrc" "$BASH_PROFILE" 2>/dev/null; then
+  echo "✅ Adding source to .bash_profile"
+  echo 'if [ -f ~/.bashrc ]; then' >> "$BASH_PROFILE"
+  echo '  . ~/.bashrc' >> "$BASH_PROFILE"
+  echo 'fi' >> "$BASH_PROFILE"
+fi
+
 # 2. Install Oh My Posh if missing
 if ! command -v oh-my-posh &> /dev/null; then
   echo "📦 Installing Oh My Posh..."
@@ -55,6 +64,11 @@ OMP_LINE="eval \"\$(oh-my-posh init bash --config $THEME)\""
 # Remove old oh-my-posh config lines
 sed -i '/oh-my-posh init bash/d' "$BASHRC"
 sed -i '/# 🧠 Oh My Posh prompt/d' "$BASHRC"
+
+# Ensure ~/.local/bin is in PATH in .bashrc
+if ! grep -qF '$HOME/.local/bin' "$BASHRC"; then
+  echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$BASHRC"
+fi
 
 # Add new config
 {
