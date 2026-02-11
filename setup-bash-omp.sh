@@ -19,7 +19,7 @@ PROFILE="$HOME/.profile"
 if [ -f "$PROFILE" ] && ! grep -qF '.local/bin' "$PROFILE"; then
   echo "✅ Adding ~/.local/bin to PATH in .profile"
   echo '' >> "$PROFILE"
-  echo '# set PATH so it includes user'\'s private bin if it exists' >> "$PROFILE"
+  echo '# set PATH so it includes user private bin if it exists' >> "$PROFILE"
   echo 'if [ -d "$HOME/.local/bin" ] ; then' >> "$PROFILE"
   echo '    PATH="$HOME/.local/bin:$PATH"' >> "$PROFILE"
   echo 'fi' >> "$PROFILE"
