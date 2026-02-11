@@ -66,14 +66,18 @@ OMP_LINE="eval \"\$(oh-my-posh init bash --config $THEME)\""
 # Remove old oh-my-posh config lines
 sed -i '/oh-my-posh init bash/d' "$BASHRC"
 sed -i '/# 🧠 Oh My Posh prompt/d' "$BASHRC"
-sed -i '/export PATH=.*\.local\/bin/d' "$BASHRC"
 
-# Ensure ~/.local/bin is in PATH in .bashrc (for non-login interactive shells)
-if ! grep -qF '.local/bin' "$BASHRC" 2>/dev/null; then
-  echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$BASHRC"
+# Remove old PATH exports for .local/bin added by this script
+sed -i '/# Oh My Posh PATH/d' "$BASHRC"
+sed -i '\|export PATH="\$HOME/\.local/bin:\$PATH"|d' "$BASHRC"
+
+# Add PATH at the beginning of .bashrc (before bash-it loads)
+if ! grep -q "# Oh My Posh PATH" "$BASHRC"; then
+  # Insert after the shebang/initial comments but before bash-it config
+  sed -i '1a\# Oh My Posh PATH\nexport PATH="$HOME/.local/bin:$PATH"\n' "$BASHRC"
 fi
 
-# Add new config
+# Add oh-my-posh config at the end
 {
   echo ""
   echo "# 🧠 Oh My Posh prompt"
