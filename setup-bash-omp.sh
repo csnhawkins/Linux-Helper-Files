@@ -14,13 +14,15 @@ sudo apt install -y unzip curl wget fontconfig git
 export PATH="$HOME/.local/bin:$PATH"
 mkdir -p "$HOME/.local/bin"
 
-# Ensure ~/.bash_profile sources ~/.bashrc for login shells
-BASH_PROFILE="$HOME/.bash_profile"
-if ! grep -qF "source ~/.bashrc" "$BASH_PROFILE" 2>/dev/null; then
-  echo "✅ Adding source to .bash_profile"
-  echo 'if [ -f ~/.bashrc ]; then' >> "$BASH_PROFILE"
-  echo '  . ~/.bashrc' >> "$BASH_PROFILE"
-  echo 'fi' >> "$BASH_PROFILE"
+# Ensure ~/.local/bin is in PATH in .profile for login shells (Ubuntu default)
+PROFILE="$HOME/.profile"
+if [ -f "$PROFILE" ] && ! grep -qF '.local/bin' "$PROFILE"; then
+  echo "✅ Adding ~/.local/bin to PATH in .profile"
+  echo '' >> "$PROFILE"
+  echo '# set PATH so it includes user'\'s private bin if it exists' >> "$PROFILE"
+  echo 'if [ -d "$HOME/.local/bin" ] ; then' >> "$PROFILE"
+  echo '    PATH="$HOME/.local/bin:$PATH"' >> "$PROFILE"
+  echo 'fi' >> "$PROFILE"
 fi
 
 # 2. Install Oh My Posh if missing
@@ -64,9 +66,10 @@ OMP_LINE="eval \"\$(oh-my-posh init bash --config $THEME)\""
 # Remove old oh-my-posh config lines
 sed -i '/oh-my-posh init bash/d' "$BASHRC"
 sed -i '/# 🧠 Oh My Posh prompt/d' "$BASHRC"
+sed -i '/export PATH=.*\.local\/bin/d' "$BASHRC"
 
-# Ensure ~/.local/bin is in PATH in .bashrc
-if ! grep -qF '$HOME/.local/bin' "$BASHRC"; then
+# Ensure ~/.local/bin is in PATH in .bashrc (for non-login interactive shells)
+if ! grep -qF '.local/bin' "$BASHRC" 2>/dev/null; then
   echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$BASHRC"
 fi
 
